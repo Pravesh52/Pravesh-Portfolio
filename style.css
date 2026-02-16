@@ -1730,3 +1730,28 @@
                 height: 26px;
             }
         }
+
+
+
+        /* ===== FINAL SAFE CURSOR FIX (No design change) ===== */
+
+a,
+button,
+.download-btn,
+.hire-btn,
+.contact-btn,
+.learn-more-btn,
+.submit-btn,
+.btn,
+.brand-logo,
+.social-icon {
+    cursor: pointer !important;
+}
+
+/* Background elements should not block clicks */
+body::before,
+.particle,
+.bg-elements {
+    pointer-events: none;
+}
+
