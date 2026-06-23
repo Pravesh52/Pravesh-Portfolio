@@ -1,4 +1,3 @@
-
 // ================= HAMBURGER MENU =================
 const hamburger = document.getElementById('hamburger');
 const mainNav = document.getElementById('mainNav');
@@ -9,7 +8,6 @@ if (hamburger && mainNav) {
         mainNav.classList.toggle('open');
     });
 
-    // Close menu when a nav link is clicked
     mainNav.querySelectorAll('a').forEach(link => {
         link.addEventListener('click', () => {
             hamburger.classList.remove('active');
@@ -40,7 +38,6 @@ if (profileContainer && profileImage) {
         const y = e.clientY - rect.top;
         const rotateX = (y - rect.height / 2) / 10;
         const rotateY = (rect.width / 2 - x) / 10;
-
         profileImage.style.transform =
             `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
     });
@@ -56,7 +53,6 @@ document.querySelectorAll('.service-card').forEach(card => {
     card.addEventListener('mouseenter', () => {
         card.style.transform = 'translateY(-10px) scale(1.02)';
     });
-
     card.addEventListener('mouseleave', () => {
         card.style.transform = 'translateY(0) scale(1)';
     });
@@ -67,7 +63,6 @@ document.querySelectorAll('.brand-logo').forEach(logo => {
     logo.addEventListener('mouseenter', () => {
         logo.style.transform = 'scale(1.2)';
     });
-
     logo.addEventListener('mouseleave', () => {
         logo.style.transform = 'scale(1)';
     });
@@ -78,7 +73,7 @@ function viewProject(url) {
     window.open(url, "_blank");
 }
 
-// ================= FORM HANDLING + EMAILJS =================
+// ================= CONTACT FORM + EMAILJS =================
 const form = document.getElementById('contactForm');
 const submitBtn = document.getElementById('submitBtn');
 
@@ -86,45 +81,38 @@ if (form) {
     form.addEventListener('submit', function (e) {
         e.preventDefault();
 
-        const name = document.getElementById('name').value;
-        const userEmail = document.getElementById('email').value;
-        const message = document.getElementById('message').value;
+        const name = document.getElementById('name').value.trim();
+        const email = document.getElementById('userEmail').value.trim();
+        const message = document.getElementById('message').value.trim();
 
-        if (!name || !userEmail || !message) {
+        if (!name || !email || !message) {
             alert('Please fill in all fields');
             return;
         }
 
-        // Disable button to prevent double submit
         submitBtn.disabled = true;
         submitBtn.textContent = 'Sending...';
 
-        let parms = {
+        emailjs.send("service_mymh6gd", "template_8ychpap", {
             from_name: name,
-            from_email: userEmail,
+            from_email: email,
             user_message: message
-        };
+        })
+        .then(function () {
+            form.reset();
+            submitBtn.textContent = 'Send';
+            submitBtn.disabled = false;
 
-        emailjs.send("service_mymh6gd", "template_8ychpap", parms)
-            .then(function () {
-                form.reset();
-
-                submitBtn.textContent = 'Send';
-                submitBtn.disabled = false;
-
-                const successBox = document.getElementById("successMessage");
-                successBox.classList.add("show");
-
-                setTimeout(() => {
-                    successBox.classList.remove("show");
-                }, 3000);
-            })
-            .catch(function (error) {
-                console.log(error);
-                alert('Something went wrong. Please try again.');
-                submitBtn.textContent = 'Send';
-                submitBtn.disabled = false;
-            });
+            const successBox = document.getElementById("successMessage");
+            successBox.classList.add("show");
+            setTimeout(() => successBox.classList.remove("show"), 3000);
+        })
+        .catch(function (error) {
+            console.error(error);
+            alert('Something went wrong. Please try again.');
+            submitBtn.textContent = 'Send';
+            submitBtn.disabled = false;
+        });
     });
 }
 
@@ -132,10 +120,14 @@ if (form) {
 const footerEmail = document.getElementById('footerEmail');
 
 if (footerEmail) {
-    footerEmail.style.cursor = 'pointer';
     footerEmail.addEventListener('click', function () {
         navigator.clipboard.writeText('Pravesh252@gmail.com')
-            .then(() => alert("Email Copied!"))
-            .catch(() => alert("Email: Pravesh252@gmail.com"));
+            .then(() => {
+                footerEmail.textContent = '✅ Email Copied!';
+                setTimeout(() => {
+                    footerEmail.textContent = 'Pravesh252@gmail.com';
+                }, 2000);
+            })
+            .catch(() => alert('Email: Pravesh252@gmail.com'));
     });
 }
